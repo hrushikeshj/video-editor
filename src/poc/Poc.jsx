@@ -9,8 +9,6 @@ import CreateCmd from '../lib/create_cmd'
 window.cc = CreateCmd;
 
 
-
-
 function Poc(){
   const [btnMsg, setBtnMsg] = useState("Trim and Join");
   const [disableBtn, setDisableBtn] = useState(false);
@@ -32,7 +30,7 @@ function Poc(){
     ffmpeg.FS('writeFile', 'rabbit.mp4', await fetchFile(rabbit));
 
     setBtnMsg('Triming video 1')
-    await ffmpeg.run("-y", "-i", "earth_in.mp4", "-t", "5", "earth.mp4");
+    await ffmpeg.run("-y", "-i", "earth_in.mp4", "-t", "3", "earth.mp4");
 
     setBtnMsg('Joining!')
     await ffmpeg.run("-vsync", "2", '-i', 'earth.mp4', '-i', 'rabbit.mp4', "-filter_complex", 
@@ -50,7 +48,7 @@ function Poc(){
   }
 
   return (
-    <div className="poc">
+    <div className="poc mt-3">
       <div className="grid grid-cols-3 gap-4">
         <Card title="Src 1">
           <video src={earth_480x270} controls></video>
