@@ -14,7 +14,7 @@ function Video({video: {title, url}}){
       backgroundSize: '100%', 
       backgroundPosition: 'center center'}
     }>
-        {title}
+        <span className='text-white'>{title}</span>
     </div>
   );
 }
