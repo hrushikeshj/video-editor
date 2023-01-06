@@ -22,7 +22,7 @@
   background: #b5b5b5; 
 }
 
-.lib-video{
+.lib-cont .lib-video{
   width: 28%;
   height: 120px;
   margin: 10px;
@@ -32,5 +32,5 @@
 }
 
 .lib-video:hover{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 rgba(106, 106, 106, 0.2), 0 6px 20px 0 rgba(56, 56, 56, 0.19);
 }

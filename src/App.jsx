@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import './App.css';
 import Library from './library/Library';
+import Timeline from './timeline/Timeline';
 
 import earth_480x270 from './assets/videos/earth_480x270.mp4'
 import rabbit from './assets/videos/480x360/rabbit.mp4'
@@ -27,6 +28,11 @@ function App() {
     log: true,
   });
 
+  /*
+  TODO:
+    convert to mp4
+    convert to "createObjectURL"
+  */
   function addVideoToLibrary(url, title){
     let file_name = title.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-") + '_' + crypto.randomUUID().split('-')[0] + '.mp4';
     //ffmpeg.FS('writeFile', file_name, await fetchFile(url));
@@ -67,7 +73,9 @@ function App() {
       <div id="preview" className="component">
         <video src={previewSrc || rabbit} controls></video>
       </div>
-      <div id="timeline" onClick={joinVideos} className="component"></div>
+      <div id="timeline" onClick={joinVideos} className="component">
+        <Timeline videos={library}/>
+      </div>
     </div>
   )
 }

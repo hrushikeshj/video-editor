@@ -1,0 +1,11 @@
+.storyboard{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.storyboard .lib-video{
+  width: 250px;
+  height: 150px;
+  border-radius: 5%;
+}

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import generateVideoThumbnail from '../lib/thumbnail'
 
-function Video({video: {title, url}}){
+function Video({video: {title, url}, bg='100%'}, cls="lib-video"){
   const [thumbnail, setThumbnail] = useState();
 
   useEffect(() => {
@@ -9,11 +9,12 @@ function Video({video: {title, url}}){
   }, []);
 
   return (
-    <div className="lib-video" style={
-      {backgroundImage: `url("${thumbnail}")`,
-      backgroundSize: '100%', 
-      backgroundPosition: 'center center'}
-    }>
+    <div className="lib-video" style={{
+      backgroundImage: `url("${thumbnail}")`,
+      backgroundSize: bg, 
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat'
+    }}>
         <span className='text-white'>{title}</span>
     </div>
   );
