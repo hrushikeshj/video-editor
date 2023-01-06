@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import generateVideoThumbnail from '../lib/thumbnail'
 
-function Video({video: {title, url}, bg='100%'}, cls="lib-video"){
+function Video({video: {title, url}, bg='100%'}){
   const [thumbnail, setThumbnail] = useState();
 
   useEffect(() => {

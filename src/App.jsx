@@ -12,7 +12,7 @@ function App() {
   const [count, setCount] = useState(0);
   const [previewSrc, setPreviewSrc] = useState();
   const [library, setLibrary] = useState([
-    {
+    /*{
       title: 'earth',
       url: earth_480x270,
       fileName: 'earth.mp4'
@@ -21,22 +21,33 @@ function App() {
       title: 'rabbit',
       url: rabbit,
       fileName: 'rabbit.mp4'
-    }
+    }*/
   ]); // for testing
 
   const ffmpeg = createFFmpeg({
     log: true,
   });
 
+  useEffect(() => {
+    //addVideoToLibrary(rabbit, 'dd');
+  }, []);
+
   /*
   TODO:
     convert to mp4
-    convert to "createObjectURL"
+    store thumbnail and length
   */
-  function addVideoToLibrary(url, title){
+  async function addVideoToLibrary(url, title){
+    if(!ffmpeg.isLoaded()){
+      await ffmpeg.load();
+    }
     let file_name = title.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-") + '_' + crypto.randomUUID().split('-')[0] + '.mp4';
-    //ffmpeg.FS('writeFile', file_name, await fetchFile(url));
-    setLibrary(lib => [...lib, {title: title, url: url, fileName: file_name}]);
+    ffmpeg.FS('writeFile', file_name, await fetchFile(url));
+
+    const output = ffmpeg.FS('readFile', file_name);
+    const new_url = URL.createObjectURL(new Blob([output.buffer], { type: 'video/mp4' }));
+
+    setLibrary(lib => [...lib, {title: title, url: new_url, fileName: file_name}]);
   }
 
   async function joinVideos(){
@@ -61,14 +72,14 @@ function App() {
       }
     }
     catch(e){
-      console.log(e)
+      console.error(e)
     }
   }
 
   return (
     <div className="App">
       <div id="library" className="component">
-        <Library videos={library}/>
+        <Library videos={library} addVideoToLibrary={addVideoToLibrary}/>
       </div>
       <div id="preview" className="component">
         <video src={previewSrc || rabbit} controls></video>
