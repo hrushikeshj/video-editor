@@ -33,10 +33,24 @@ function Poc(){
     await ffmpeg.run("-y", "-i", "earth_in.mp4", "-t", "3", "earth.mp4");
 
     setBtnMsg('Joining!')
-    await ffmpeg.run("-vsync", "2", '-i', 'earth.mp4', '-i', 'rabbit.mp4', "-filter_complex", 
-                    "[0]scale=480:360:force_original_aspect_ratio=decrease,pad=480:360:(ow-iw)/2:(oh-ih)/2,setsar=1[v0];[1]scale=480:360:force_original_aspect_ratio=decrease,pad=480:360:(ow-iw)/2:(oh-ih)/2,setsar=1[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[v]",
-                    "-map", "[v]", "output.mp4");
-    
+    /*await ffmpeg.run("-vsync", "2", '-i', 'earth.mp4', '-i', 'rabbit.mp4', "-filter_complex", 
+                    "[0]scale=480:360:force_original_aspect_ratio=decrease,pad=480:360:(ow-iw)/2:(oh-ih)/2,setsar=1[v0];[1]scale=480:360:force_original_aspect_ratio=decrease,pad=480:360:(ow-iw)/2:(oh-ih)/2,setsar=1[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[v][a]",
+                    "-map", "[v]", "-map", "[a]", "output.mp4");*/
+    let cmd = CreateCmd.joinVideos([
+      {
+        title: 'ff1',
+        url: 'ff',
+        fileName: 'earth.mp4',
+      },
+      {
+        title: 'ff2',
+        url: 'ff',
+        fileName: 'rabbit.mp4',
+      }
+    ])
+    console.log(cmd);
+    await ffmpeg.run(...cmd);
+
     const output = ffmpeg.FS('readFile', 'output.mp4');
     setOutSrc(URL.createObjectURL(new Blob([output.buffer], { type: 'video/mp4' })));
     setBtnMsg('Complete!');

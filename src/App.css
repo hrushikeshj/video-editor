@@ -2,3 +2,33 @@
   margin: 0 40px;
 }
 
+.App{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(152, 152, 152, 0.7);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px
+}
+
+#timeline{
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.component{
+  width: 100%;
+  background: #e9e9e9;
+}
+
+#library{
+  height: calc(50vh - 10px);
+}
+
+#preview video{
+  margin: auto;
+}
