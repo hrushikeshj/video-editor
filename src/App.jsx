@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import { DragDropContext } from "react-beautiful-dnd";
 import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
@@ -12,7 +13,7 @@ function App() {
   const [count, setCount] = useState(0);
   const [previewSrc, setPreviewSrc] = useState();
   const [library, setLibrary] = useState([
-    /*{
+    {
       title: 'earth',
       url: earth_480x270,
       fileName: 'earth.mp4'
@@ -21,8 +22,9 @@ function App() {
       title: 'rabbit',
       url: rabbit,
       fileName: 'rabbit.mp4'
-    }*/
+    }
   ]); // for testing
+  const [timeline, setTimeline] = useState(library);
 
   const ffmpeg = createFFmpeg({
     log: true,
@@ -55,19 +57,19 @@ function App() {
       await ffmpeg.load();
     }
 
-    for(const f of library){
+    for(const f of timeline){
       ffmpeg.FS('writeFile', f.fileName, await fetchFile(f.url));
     }
 
-    await ffmpeg.run(...CreateCmd.joinVideos(library));
+    await ffmpeg.run(...CreateCmd.joinVideos(timeline));
 
-    console.log(CreateCmd.joinVideos(library));
+    console.log(CreateCmd.joinVideos(timeline));
     const output = ffmpeg.FS('readFile', 'output.mp4');
     setPreviewSrc(URL.createObjectURL(new Blob([output.buffer], { type: 'video/mp4' })));
 
     // clean up
     try{
-      for(const f of library){
+      for(const f of timeline){
         ffmpeg.FS('unlink', f.fileName);
       }
     }
@@ -76,17 +78,37 @@ function App() {
     }
   }
 
+  const onDragEnd = result => {
+    console.log(result);
+    const { destination, source, draggableId } = result;
+
+    if(
+      destination.droppableId === source.droppableId &&
+      destination.index == source.index
+    ){
+        return;
+    }
+
+    const newTimeline = Array.from(timeline);
+    const vid = newTimeline.splice(source.index, 1);
+    newTimeline.splice(destination.index, 0, vid[0])
+    setTimeline(newTimeline);
+  }
+
   return (
     <div className="App">
-      <div id="library" className="component">
-        <Library videos={library} addVideoToLibrary={addVideoToLibrary}/>
-      </div>
-      <div id="preview" className="component">
-        <video src={previewSrc || rabbit} controls></video>
-      </div>
-      <div id="timeline" onClick={joinVideos} className="component">
-        <Timeline videos={library}/>
-      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div id="library" className="component">
+          <Library videos={library} addVideoToLibrary={addVideoToLibrary}/>
+        </div>
+        <div id="preview" className="component">
+          <video src={previewSrc || rabbit} controls></video>
+        </div>
+        <div id="timeline" className="component">
+          <button className="btn btn-info" onClick={joinVideos}>Join</button>
+          <Timeline videos={timeline}/>
+        </div>
+      </DragDropContext>
     </div>
   )
 }

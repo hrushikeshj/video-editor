@@ -5,7 +5,6 @@ import './Library.css'
 function Library({videos, addVideoToLibrary}){
 
   function addVideo({ target: { files } }){
-    console.log("hello", files);
     const { name } = files[0];
     addVideoToLibrary(files[0], name);
   }
