@@ -1,25 +1,32 @@
 .videos{
   display: flex;
   flex-wrap: wrap;
-  height: calc(40vh - 10px); /* fix this */
+  height: calc(40vh - 20px); /* fix this */
   overflow-y: scroll;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
+.videos::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px;
 }
 
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
+.videos:hover::-webkit-scrollbar {
+  width: 8px;
 }
- 
-::-webkit-scrollbar-thumb {
+
+.videos:hover::-webkit-scrollbar-thumb {
   background: rgb(174, 174, 174); 
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #b5b5b5; 
+@media (hover: none) { 
+  .videos::-webkit-scrollbar {
+    width: 8px;
+  }
+  .videos::-webkit-scrollbar-thumb {
+    background: rgb(174, 174, 174); 
+    border-radius: 10px;
+  }
 }
 
 .lib-cont .lib-video{
