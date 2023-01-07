@@ -1,8 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { Droppable } from "react-beautiful-dnd";
 import Video from './Video';
 import './Library.css'
 
 function Library({videos, addVideoToLibrary}){
+  // B-DnD fix in StrictMode
+  const [ enabled, setEnabled ] = useState(false);
+
+  useEffect(() => {
+    const animation = requestAnimationFrame(() => setEnabled(true));
+
+    return () => {
+       cancelAnimationFrame(animation);
+       setEnabled(false);
+    };
+  }, []);
+
+  if (!enabled) {
+      return null;
+  }
+  // end hack
 
   function addVideo({ target: { files } }){
     const { name } = files[0];
@@ -18,11 +35,14 @@ function Library({videos, addVideoToLibrary}){
           <input type="file" onChange={addVideo}/>
           <i className="fa fa-cloud-upload"/> Attach
       </label>
-      <div className="videos mr-2">
-        {
-          videos.map(v => <Video video={v} key={v.fileName}/>)
-        }  
-      </div>
+      <Droppable droppableId="library">
+      {provided => (
+        <div className="videos mr-2"  ref={provided.innerRef} {...provided.droppableProps}>
+          {videos.map((v, i) => <Video video={v} key={v.fileName} index={i}/>)}
+          {provided.placeholder}
+        </div>
+      )}
+      </Droppable>
     </div>
   );
 }

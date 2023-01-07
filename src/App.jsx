@@ -9,6 +9,10 @@ import earth_480x270 from './assets/videos/earth_480x270.mp4'
 import rabbit from './assets/videos/480x360/rabbit.mp4'
 import CreateCmd from './lib/create_cmd'
 
+function uuid(){
+  return crypto.randomUUID().split('-')[0];
+}
+
 function App() {
   const [count, setCount] = useState(0);
   const [previewSrc, setPreviewSrc] = useState();
@@ -24,7 +28,7 @@ function App() {
       fileName: 'rabbit.mp4'
     }
   ]); // for testing
-  const [timeline, setTimeline] = useState(library);
+  const [timeline, setTimeline] = useState([]);
 
   const ffmpeg = createFFmpeg({
     log: true,
@@ -43,7 +47,7 @@ function App() {
     if(!ffmpeg.isLoaded()){
       await ffmpeg.load();
     }
-    let file_name = title.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-") + '_' + crypto.randomUUID().split('-')[0] + '.mp4';
+    let file_name = title.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-") + '_' + uuid() + '.mp4';
     ffmpeg.FS('writeFile', file_name, await fetchFile(url));
 
     const output = ffmpeg.FS('readFile', file_name);
@@ -78,10 +82,20 @@ function App() {
     }
   }
 
+  const addVideoToTimeline = (lib_index, dest_index) => {
+    const video = { ...library[lib_index] };
+    video.fileName = uuid() + '_' + video.fileName;
+
+    const newTimeline = Array.from(timeline);
+    newTimeline.splice(dest_index, 0, video)
+    setTimeline(newTimeline);
+  }
+
   const onDragEnd = result => {
     console.log(result);
     const { destination, source, draggableId } = result;
 
+    // no change
     if(
       destination.droppableId === source.droppableId &&
       destination.index == source.index
@@ -89,6 +103,20 @@ function App() {
         return;
     }
 
+    if(
+      (destination.droppableId === 'library' && source.droppableId === 'library') ||
+      (source.droppableId === 'timeline' && destination.droppableId === 'library')
+    ){
+      return;
+    }
+
+    // add video to timeline
+    if(source.droppableId === 'library' && destination.droppableId === 'timeline'){
+      addVideoToTimeline(source.index, destination.index);
+      return;
+    }
+
+    // re-order timeline
     const newTimeline = Array.from(timeline);
     const vid = newTimeline.splice(source.index, 1);
     newTimeline.splice(destination.index, 0, vid[0])

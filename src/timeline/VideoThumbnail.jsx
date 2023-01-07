@@ -12,8 +12,8 @@ function VideoThumbnail({video: {title, url, fileName}, bg='100%', index}){
   return (
     <Draggable draggableId={fileName} index={index}>
       {provided => (
-        <div ref={provided.innerRef} {...provided.draggableProps}
-          index={index} {...provided.dragHandleProps} 
+        <div ref={provided.innerRef}
+          {...provided.draggableProps} {...provided.dragHandleProps} 
           className="thumbnail-cont"
         >
           <div 

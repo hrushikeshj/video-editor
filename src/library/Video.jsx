@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
+import { Draggable } from "react-beautiful-dnd";
 import generateVideoThumbnail from '../lib/thumbnail'
 
-function Video({video: {title, url}, bg='100%'}){
+function Video({video: {title, url, fileName}, bg='100%', index}){
   const [thumbnail, setThumbnail] = useState();
 
   useEffect(() => {
@@ -9,14 +10,26 @@ function Video({video: {title, url}, bg='100%'}){
   }, []);
 
   return (
-    <div className="lib-video" style={{
-      backgroundImage: `url("${thumbnail}")`,
-      backgroundSize: bg, 
-      backgroundPosition: 'center center',
-      backgroundRepeat: 'no-repeat'
-    }}>
-        <span className='text-white'>{title}</span>
-    </div>
+    <Draggable draggableId={'lib'+fileName} index={index}>
+    {provided =>(
+      <div ref={provided.innerRef} className="lib-video"
+        {...provided.draggableProps} {...provided.dragHandleProps} 
+      >
+        <div 
+          style={{
+            backgroundImage: `url("${thumbnail}")`,
+            backgroundSize: bg, 
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
+            width: '100%',
+            height: '100%'
+          }}
+        >
+          <span className='text-white'>{title}</span>
+        </div>
+      </div>
+    )}
+    </Draggable>
   );
 }
 

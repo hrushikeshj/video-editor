@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Timeline.css'
 import { Droppable } from "react-beautiful-dnd";
 import VideoThumbnail from './VideoThumbnail'
