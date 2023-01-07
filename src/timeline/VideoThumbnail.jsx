@@ -14,7 +14,7 @@ function VideoThumbnail({video: {title, url, fileName}, bg='100%', index}){
       {provided => (
         <div ref={provided.innerRef}
           {...provided.draggableProps} {...provided.dragHandleProps} 
-          className="thumbnail-cont"
+          className="thumbnail-warpper"
         >
           <div 
             style={{
