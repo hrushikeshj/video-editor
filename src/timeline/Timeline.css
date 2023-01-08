@@ -1,5 +1,6 @@
 :root {
-  --thumbnail-height: 150px;
+  --thumbnail-height: 110px;
+  --thumbnail-width: 185px;
 }
 .storyboard{
   display: flex;
@@ -9,7 +10,7 @@
 }
 
 .storyboard .thumbnail-warpper{
-  width: 250px;
-  height: 150px;
+  width: var(--thumbnail-width);
+  height: var(--thumbnail-height);
   border-radius: 5%;
 }

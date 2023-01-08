@@ -135,7 +135,7 @@ function App() {
           <video src={previewSrc || rabbit} controls></video>
         </div>
         <div id="timeline" className="component">
-          <button className="btn btn-info" onClick={joinVideos}>Join</button>
+          <button className="btn-sm btn-info" onClick={joinVideos}>Join</button>
           <Timeline videos={timeline}/>
         </div>
       </DragDropContext>

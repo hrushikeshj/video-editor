@@ -1,17 +1,17 @@
 .videos{
   display: flex;
   flex-wrap: wrap;
-  height: calc(40vh - 20px); /* fix this */
+  height: calc(35vh - 10px); /* fix this */
   overflow-y: scroll;
 }
 
 .videos::-webkit-scrollbar {
   background-color: transparent;
-  width: 8px;
+  width: 6px;
 }
 
 .videos:hover::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .videos:hover::-webkit-scrollbar-thumb {
@@ -31,11 +31,10 @@
 
 .lib-cont .lib-video{
   width: 28%;
-  height: 120px;
-  margin: 10px;
+  height: 90px;
+  margin: 7px;
   text-align: center;
   font-size: 30px;
-  
 }
 
 .lib-video:hover{
