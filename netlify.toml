@@ -1,5 +1,5 @@
 [build]
-  command = "bash scripts/deploy.sh"
+  command = "npm install && npm run build"
 
 [[headers]]
   for = "/*"
