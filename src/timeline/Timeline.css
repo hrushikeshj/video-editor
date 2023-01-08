@@ -1,0 +1,15 @@
+:root {
+  --thumbnail-height: 150px;
+}
+.storyboard{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  min-height: var(--thumbnail-height);
+}
+
+.storyboard .thumbnail-warpper{
+  width: 250px;
+  height: 150px;
+  border-radius: 5%;
+}

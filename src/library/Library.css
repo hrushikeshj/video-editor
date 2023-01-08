@@ -1,0 +1,43 @@
+.videos{
+  display: flex;
+  flex-wrap: wrap;
+  height: calc(40vh - 20px); /* fix this */
+  overflow-y: scroll;
+}
+
+.videos::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px;
+}
+
+.videos:hover::-webkit-scrollbar {
+  width: 8px;
+}
+
+.videos:hover::-webkit-scrollbar-thumb {
+  background: rgb(174, 174, 174); 
+  border-radius: 10px;
+}
+
+@media (hover: none) { 
+  .videos::-webkit-scrollbar {
+    width: 8px;
+  }
+  .videos::-webkit-scrollbar-thumb {
+    background: rgb(174, 174, 174); 
+    border-radius: 10px;
+  }
+}
+
+.lib-cont .lib-video{
+  width: 28%;
+  height: 120px;
+  margin: 10px;
+  text-align: center;
+  font-size: 30px;
+  
+}
+
+.lib-video:hover{
+  box-shadow: 0 4px 8px 0 rgba(106, 106, 106, 0.2), 0 6px 20px 0 rgba(56, 56, 56, 0.19);
+}
