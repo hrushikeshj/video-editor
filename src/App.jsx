@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import { DragDropContext } from "react-beautiful-dnd";
+import { uuid } from './lib/util';
 import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
@@ -8,10 +9,6 @@ import Timeline from './timeline/Timeline';
 import earth_480x270 from './assets/videos/earth_480x270.mp4'
 import rabbit from './assets/videos/480x360/rabbit.mp4'
 import CreateCmd from './lib/create_cmd'
-
-function uuid(){
-  return crypto.randomUUID().split('-')[0];
-}
 
 function App() {
   const [count, setCount] = useState(0);
@@ -83,7 +80,7 @@ function App() {
   }
 
   const addVideoToTimeline = (lib_index, dest_index) => {
-    const video = { ...library[lib_index] };
+    const video = { ...library[lib_index], original: true };
     video.fileName = uuid() + '_' + video.fileName;
 
     const newTimeline = Array.from(timeline);
@@ -94,6 +91,11 @@ function App() {
   const onDragEnd = result => {
     console.log(result);
     const { destination, source, draggableId } = result;
+
+    if(destination === null || source === null){
+      console.error("destination or source is null");
+      return;
+    }
 
     // no change
     if(

@@ -12,7 +12,7 @@ function Video({video: {title, url, fileName}, bg='100%', index}){
   return (
     <Draggable draggableId={'lib'+fileName} index={index}>
     {provided =>(
-      <div ref={provided.innerRef} className="lib-video"
+      <div ref={provided.innerRef} className="lib-video" onClick={() => alert('hi')}
         {...provided.draggableProps} {...provided.dragHandleProps} 
       >
         <div 
