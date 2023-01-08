@@ -27,17 +27,17 @@ function Library({videos, addVideoToLibrary}){
   }
 
   return (
-    <div className='ml-4 mt-4 lib-cont'>
+    <div className='ml-4 mt-2 lib-cont'>
       <div className="prose lg:prose-xl">
-        <h3 className='text-white'>Library</h3>
+        <h5 className='text-white'>Library</h5>
       </div>
-      <label className="custom-file-upload">
+      <label className="custom-file-upload text-sm">
           <input type="file" onChange={addVideo}/>
           <i className="fa fa-cloud-upload"/> Attach
       </label>
       <Droppable droppableId="library">
       {provided => (
-        <div className="videos mr-2"  ref={provided.innerRef} {...provided.droppableProps}>
+        <div className="videos mr-1 mt-1"  ref={provided.innerRef} {...provided.droppableProps}>
           {videos.map((v, i) => <Video video={v} key={v.fileName} index={i}/>)}
           {provided.placeholder}
         </div>

@@ -23,8 +23,8 @@ function Timeline({videos}){
   // end hack
 
   return (
-    <div className='m-4'>
-      <div style={{height: '80px'}}></div>
+    <div className='m-2'>
+      <div style={{height: '30px'}}></div>
       <Droppable droppableId="timeline" direction="horizontal">
         {provided => (
           <div className='storyboard ml-4' ref={provided.innerRef} {...provided.droppableProps}>

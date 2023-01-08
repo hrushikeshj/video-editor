@@ -12,7 +12,7 @@ function Video({video: {title, url, fileName}, bg='100%', index}){
   return (
     <Draggable draggableId={'lib'+fileName} index={index}>
     {provided =>(
-      <div ref={provided.innerRef} className="lib-video" onClick={() => alert('hi')}
+      <div ref={provided.innerRef} className="lib-video"
         {...provided.draggableProps} {...provided.dragHandleProps} 
       >
         <div 
@@ -25,7 +25,7 @@ function Video({video: {title, url, fileName}, bg='100%', index}){
             height: '100%'
           }}
         >
-          <span className='text-white'>{title}</span>
+          <span className='text-white text-2xl'>{title}</span>
         </div>
       </div>
     )}
