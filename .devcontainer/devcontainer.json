@@ -12,12 +12,6 @@
 
 	// Use 'portsAttributes' to set default properties for specific forwarded ports. 
 	// More info: https://containers.dev/implementors/json_reference/#port-attributes
-	"portsAttributes": {
-		"3000": {
-			"label": "Hello",
-			"onAutoForward": "notify"
-		}
-	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "npm install"
