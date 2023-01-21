@@ -27,17 +27,17 @@ function Library({videos, addVideoToLibrary, setModalUrl, setModalShow}){
   }
 
   return (
-    <div className='ml-4 mt-2 lib-cont'>
+    <div className='ms-2 mt-2 lib-cont pe-1'>
       <div className="prose lg:prose-xl">
         <h5 className='text-white'>Library</h5>
       </div>
-      <label className="custom-file-upload text-sm">
-          <input type="file" onChange={addVideo}/>
-          <i className="fa fa-cloud-upload"/> Attach
+      <label id="lib-input-label" htmlFor="lib-input" className="custom-file-upload text-white">
+        <input id="lib-input" type="file" onChange={addVideo} accept="video/mp4"/>
+        <i className="bi bi-plus-lg"/> <span >Add</span>
       </label>
       <Droppable droppableId="library">
       {provided => (
-        <div className="videos mr-1 mt-1"  ref={provided.innerRef} {...provided.droppableProps}>
+        <div className="videos mt-1"  ref={provided.innerRef} {...provided.droppableProps}>
           {videos.map((v, i) => <Video preview={() => {setModalUrl(v.url); setModalShow(true)}} video={v} key={v.fileName} index={i}/>)}
           {provided.placeholder}
         </div>

@@ -38,3 +38,17 @@
 .lib-video:hover{
   box-shadow: 0 4px 8px 0 rgba(106, 106, 106, 0.2), 0 6px 20px 0 rgba(56, 56, 56, 0.19);
 }
+
+#lib-input{
+  display: none;
+}
+
+#lib-input-label{
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 0.37rem;
+}
+
+#lib-input-label:hover{
+  background-color: #565656 !important;
+}
