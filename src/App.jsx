@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import { DragDropContext } from "react-beautiful-dnd";
 import { uuid } from './lib/util';
-import Button from 'react-bootstrap/Button';
 import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
@@ -80,6 +79,20 @@ function App() {
     }
   }
 
+  function removeFromTimeline(file_name){
+    const videos = timeline.filter(video => {
+      if(video.fileName !== file_name) return true;
+
+      if(video.original === false){
+        URL.revokeObjectURL(video.url);
+      }
+
+      return false;
+    });
+
+    setTimeline(videos);
+  }
+
   const addVideoToTimeline = (lib_index, dest_index) => {
     const video = { ...library[lib_index], original: true };
     video.fileName = uuid() + '_' + video.fileName;
@@ -137,8 +150,7 @@ function App() {
           <video src={previewSrc || rabbit} controls></video>
         </div>
         <div id="timeline" className="component">
-          <Button className="btn-sm btn-info" onClick={joinVideos}>Join</Button>
-          <Timeline videos={timeline}/>
+          <Timeline videos={timeline} joinVideos={joinVideos} removeVideo={removeFromTimeline}/>
         </div>
       </DragDropContext>
     </div>

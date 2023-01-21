@@ -15,3 +15,28 @@
   height: var(--thumbnail-height);
   border-radius: 5%;
 }
+
+.thumbnail-warpper[select="true"]{
+  border: 3px #fff solid;
+}
+
+.options{
+  margin-right: 60px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.options .divider{
+  border-left: 1px #a6a6a6 solid;
+  margin: 0px 3px;
+  padding: 0px 3px;
+
+}
+
+.options .video-option{
+  border: #ffffff;
+}
+
+.options .video-option:hover{
+  background-color: #565656 !important;
+}

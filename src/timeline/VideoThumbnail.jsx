@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import { Draggable } from "react-beautiful-dnd";
 import generateVideoThumbnail from '../lib/thumbnail'
 
-function VideoThumbnail({video: {title, url, fileName}, bg='100%', index}){
+function VideoThumbnail({video: {title, url, fileName}, bg='100%', index, select, selected}){
   const [thumbnail, setThumbnail] = useState();
 
   useEffect(() => {
@@ -12,9 +12,9 @@ function VideoThumbnail({video: {title, url, fileName}, bg='100%', index}){
   return (
     <Draggable draggableId={fileName} index={index}>
       {provided => (
-        <div ref={provided.innerRef}
+        <div ref={provided.innerRef} onClick={select}
           {...provided.draggableProps} {...provided.dragHandleProps} 
-          className="thumbnail-warpper"
+          className="thumbnail-warpper" select={selected ? 'true' : 'false'} hjhj="dd"
         >
           <div 
             style={{
