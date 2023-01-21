@@ -4,7 +4,7 @@ import { Droppable } from "react-beautiful-dnd";
 import Button from 'react-bootstrap/Button';
 import VideoThumbnail from './VideoThumbnail'
 
-function Timeline({videos, joinVideos, removeVideo}){
+function Timeline({videos, joinVideos, removeVideo, setModalUrl, setModalShow}){
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   // B-DnD fix in StrictMode
@@ -28,6 +28,17 @@ function Timeline({videos, joinVideos, removeVideo}){
       <div className="grid-center my-2">
         <div className='options'>
           <Button className="btn-sm btn-info" onClick={joinVideos}>Join</Button>
+
+          <Button
+              className='bg-transparent video-option'
+              disabled={selectedVideo === null}
+              onClick={() => {
+                setModalShow(true);
+                setModalUrl(videos.find(v => v.fileName == selectedVideo).url);
+              }}
+            >
+              <i class="bi bi-eye text-white"></i> Preview
+            </Button>
 
           <div className='divider'>
             <Button

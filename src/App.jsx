@@ -5,13 +5,15 @@ import { uuid } from './lib/util';
 import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
+import VideoPreviewModal from './util/Modal'
+import useVidoeModal from './hooks/useVideoModal'
 
 import earth_480x270 from './assets/videos/earth_480x270.mp4'
 import rabbit from './assets/videos/480x360/rabbit.mp4'
 import CreateCmd from './lib/create_cmd'
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { modalShow, modalUrl, setModalShow, setModalUrl } = useVidoeModal();
   const [previewSrc, setPreviewSrc] = useState();
   const [library, setLibrary] = useState([
     {
@@ -140,20 +142,40 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <>
+      <div className="App">
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div id="library" className="component">
-          <Library videos={library} addVideoToLibrary={addVideoToLibrary}/>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div id="library" className="component">
+            <Library videos={library} addVideoToLibrary={addVideoToLibrary} setModalUrl={setModalUrl} setModalShow={setModalShow}/>
+          </div>
+          <div id="preview" className="component">
+            <video src={previewSrc || rabbit} controls></video>
+          </div>
+          <div id="timeline" className="component">
+            <Timeline
+              videos={timeline}
+              joinVideos={joinVideos}
+              removeVideo={removeFromTimeline}
+              setModalUrl={setModalUrl}
+              setModalShow={setModalShow}
+            />
+          </div>
+        </DragDropContext>
+      </div>
+
+      <VideoPreviewModal show={modalShow} setShow={setModalShow}>
+        <div
+          style={{
+            display: 'grid',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <video src={modalUrl} controls autoPlay={true}></video>
         </div>
-        <div id="preview" className="component">
-          <video src={previewSrc || rabbit} controls></video>
-        </div>
-        <div id="timeline" className="component">
-          <Timeline videos={timeline} joinVideos={joinVideos} removeVideo={removeFromTimeline}/>
-        </div>
-      </DragDropContext>
-    </div>
+      </VideoPreviewModal>
+    </>
   )
 }
 
