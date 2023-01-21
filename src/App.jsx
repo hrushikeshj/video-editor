@@ -7,6 +7,7 @@ import Library from './library/Library';
 import Timeline from './timeline/Timeline';
 import VideoPreviewModal from './util/Modal'
 import useVidoeModal from './hooks/useVideoModal'
+import generateVideoThumbnail from './lib/thumbnail'
 
 import earth_480x270 from './assets/videos/earth_480x270.mp4'
 import rabbit from './assets/videos/480x360/rabbit.mp4'
@@ -15,18 +16,7 @@ import CreateCmd from './lib/create_cmd'
 function App() {
   const { modalShow, modalUrl, setModalShow, setModalUrl } = useVidoeModal();
   const [previewSrc, setPreviewSrc] = useState();
-  const [library, setLibrary] = useState([
-    {
-      title: 'earth',
-      url: earth_480x270,
-      fileName: 'earth.mp4'
-    },
-    {
-      title: 'rabbit',
-      url: rabbit,
-      fileName: 'rabbit.mp4'
-    }
-  ]); // for testing
+  const [library, setLibrary] = useState([]);
   const [timeline, setTimeline] = useState([]);
 
   const ffmpeg = createFFmpeg({
@@ -34,8 +24,24 @@ function App() {
   });
 
   useEffect(() => {
+    if(library.length != 0) return;
+
+    [
+      {
+        title: 'earth',
+        url: earth_480x270,
+        fileName: 'earth.mp4'
+      },
+      {
+        title: 'rabbit',
+        url: rabbit,
+        fileName: 'rabbit.mp4'
+      }
+    ].forEach(v => {
+      addVideoToLibrary(v.url, v.fileName)
+    })
     //addVideoToLibrary(rabbit, 'dd');
-  }, []);
+  }, []);// for testing
 
   /*
   TODO:
@@ -51,8 +57,9 @@ function App() {
 
     const output = ffmpeg.FS('readFile', file_name);
     const new_url = URL.createObjectURL(new Blob([output.buffer], { type: 'video/mp4' }));
+    const { duration, thumbnail } = await generateVideoThumbnail(new_url);
 
-    setLibrary(lib => [...lib, {title: title, url: new_url, fileName: file_name}]);
+    setLibrary(lib => [...lib, {title: title, url: new_url, fileName: file_name, duration, thumbnail}]);
   }
 
   async function joinVideos(){

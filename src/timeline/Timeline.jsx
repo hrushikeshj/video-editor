@@ -37,7 +37,7 @@ function Timeline({videos, joinVideos, removeVideo, setModalUrl, setModalShow}){
                 setModalUrl(videos.find(v => v.fileName == selectedVideo).url);
               }}
             >
-              <i class="bi bi-eye text-white"></i> Preview
+              <i className="bi bi-eye text-white"></i> Preview
             </Button>
 
           <div className='divider'>

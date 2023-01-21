@@ -9,6 +9,7 @@ const generateVideoThumbnail = (url) => {
     video.src = url;
 
     video.onloadeddata = () => {
+      const duration = video.duration;
       let ctx = canvas.getContext("2d");
 
       canvas.width = video.videoWidth;
@@ -16,7 +17,11 @@ const generateVideoThumbnail = (url) => {
 
       ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
       video.pause();
-      return resolve(canvas.toDataURL("image/png"));
+
+      return resolve({
+        duration: duration,
+        thumbnail: canvas.toDataURL("image/png")
+      });
     };
   });
 };
