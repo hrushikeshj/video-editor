@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import { DragDropContext } from "react-beautiful-dnd";
-import { uuid } from './lib/util';
+import { uuid, releaseUrl } from './lib/util';
 import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
@@ -76,6 +76,38 @@ function App() {
     setTimeline(videos);
   }
 
+  const replaceVideo = async (file_name, new_url) => {
+    const i = timeline.findIndex(v => v.fileName === file_name);
+    if(i === -1) return;
+
+    releaseUrl(timeline[i].url, timeline[i].original);
+
+    const newTimeline = [...timeline];
+    // regenerate metadata
+    const { duration, thumbnail } = await generateVideoThumbnail(new_url);
+    const new_video = {...newTimeline[i], original: false, url: new_url, duration, thumbnail};
+    new_video.fileName = uuid() + '_' + new_video.fileName;
+
+    newTimeline.splice(i, 1, new_video);
+
+    setTimeline(newTimeline);
+  }
+
+  //TODO: way to release url
+  const duplicate = (file_name) => {
+    const newTimeline = [...timeline];
+    const i = newTimeline.findIndex(v => v.fileName === file_name);
+    if(i === -1) return;
+
+    newTimeline[i].original = true;//
+    const dup = {...newTimeline[i]}
+    dup.fileName = uuid() + '_' + dup.fileName;
+
+    newTimeline.splice(i, 0, dup);
+
+    setTimeline(newTimeline);
+  }
+
   const addVideoToTimeline = (lib_index, dest_index) => {
     const video = { ...library[lib_index], original: true };
     video.fileName = uuid() + '_' + video.fileName;
@@ -137,10 +169,7 @@ function App() {
             <Timeline
               videos={timeline}
               removeVideo={removeFromTimeline}
-              setModalUrl={setModalUrl}
-              setModalShow={setModalShow}
-              ffmpeg={ffmpeg}
-              setPreviewSrc={setPreviewSrc}
+              {...{setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate}}
             />
           </div>
         </DragDropContext>

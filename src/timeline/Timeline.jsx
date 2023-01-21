@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { joinVideos } from '../lib/util'
+import { joinVideos, trimVideo } from '../lib/util'
 import './Timeline.css'
 import { Droppable } from "react-beautiful-dnd";
 import Button from 'react-bootstrap/Button';
 import VideoThumbnail from './VideoThumbnail'
 
-function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc}){
+function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate}){
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [progress, setProgress] = useState({});
+  const [progress, setProgress] = useState({time: -1});
   const [running, setRunning] = useState(false);
 
   ffmpeg.setProgress(setProgress)
@@ -22,9 +22,17 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
     setPreviewSrc(out_url);
   }
 
+  const trim = async (video) => {
+    setSelectedVideo(null);
+    let ss = prompt("start time(in sec)");
+    let t = prompt("total duration(in sec)");
+    const out_url = await trimVideo(ffmpeg, video.url, video.fileName, ss, t);
+    replaceVideo(video.fileName, out_url);
+  }
+
 
   // B-DnD fix in StrictMode
-  const [ enabled, setEnabled ] = useState(false);
+  const [enabled, setEnabled ] = useState(false);
   useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
 
@@ -49,20 +57,36 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
           <Button
               className='bg-transparent video-option'
               disabled={selectedVideo === null}
+              onClick={() => trim(selectedVideo)}
+            >
+              <i className="bi bi-scissors text-white"></i> Trim(!to be improved)
+          </Button>
+
+          <Button
+              className='bg-transparent video-option'
+              disabled={selectedVideo === null}
+              onClick={() => duplicate(selectedVideo.fileName)}
+            >
+              <i className="bi bi-journal-bookmark-fill text-white"></i> Clone
+          </Button>
+
+          <Button
+              className='bg-transparent video-option'
+              disabled={selectedVideo === null}
               onClick={() => {
                 setModalShow(true);
-                setModalUrl(videos.find(v => v.fileName == selectedVideo).url);
+                setModalUrl(selectedVideo.url);
               }}
             >
               <i className="bi bi-eye text-white"></i> Preview
-            </Button>
+          </Button>
 
           <div className='divider'>
             <Button
               className='bg-transparent video-option'
               disabled={selectedVideo === null}
               onClick={() => {
-                removeVideo(selectedVideo);
+                removeVideo(selectedVideo.fileName);
                 setSelectedVideo(null);
               }}
             >
@@ -76,8 +100,8 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
         {provided => (
           <div className='storyboard px-2 ' ref={provided.innerRef} {...provided.droppableProps}>
             {videos.map((v, i) => <VideoThumbnail 
-                                    select={() => setSelectedVideo(v.fileName)}
-                                    selected={selectedVideo === v.fileName} 
+                                    select={() => setSelectedVideo(v)}
+                                    selected={selectedVideo && (selectedVideo.fileName === v.fileName)} 
                                     video={v} 
                                     bg="cover" 
                                     key={v.fileName} 
