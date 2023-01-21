@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Droppable } from "react-beautiful-dnd";
 import Video from './Video';
+import VideoPreviewModal from '../util/Modal'
+import useVidoeModal from '../hooks/useVideoModal'
 import './Library.css'
 
 function Library({videos, addVideoToLibrary}){
+  const { show, url, setShow, setUrl } = useVidoeModal();
   // B-DnD fix in StrictMode
   const [ enabled, setEnabled ] = useState(false);
 
@@ -38,11 +41,23 @@ function Library({videos, addVideoToLibrary}){
       <Droppable droppableId="library">
       {provided => (
         <div className="videos mr-1 mt-1"  ref={provided.innerRef} {...provided.droppableProps}>
-          {videos.map((v, i) => <Video video={v} key={v.fileName} index={i}/>)}
+          {videos.map((v, i) => <Video preview={() => {setUrl(v.url); setShow(true)}} video={v} key={v.fileName} index={i}/>)}
           {provided.placeholder}
         </div>
       )}
       </Droppable>
+
+      <VideoPreviewModal show={show} setShow={setShow}>
+        <div
+          style={{
+            display: 'grid',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <video src={url} controls autoPlay={true}></video>
+        </div>
+      </VideoPreviewModal>
     </div>
   );
 }

@@ -23,11 +23,11 @@ function Timeline({videos}){
   // end hack
 
   return (
-    <div className='m-2'>
+    <div>
       <div style={{height: '30px'}}></div>
       <Droppable droppableId="timeline" direction="horizontal">
         {provided => (
-          <div className='storyboard ml-4' ref={provided.innerRef} {...provided.droppableProps}>
+          <div className='storyboard px-2' ref={provided.innerRef} {...provided.droppableProps}>
             {videos.map((v, i) => <VideoThumbnail video={v} bg="cover" key={v.fileName} index={i}/>)}
             {provided.placeholder}
           </div>
