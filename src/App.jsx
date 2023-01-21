@@ -62,32 +62,6 @@ function App() {
     setLibrary(lib => [...lib, {title: title, url: new_url, fileName: file_name, duration, thumbnail}]);
   }
 
-  async function joinVideos(){
-    if(!ffmpeg.isLoaded()){
-      await ffmpeg.load();
-    }
-
-    for(const f of timeline){
-      ffmpeg.FS('writeFile', f.fileName, await fetchFile(f.url));
-    }
-
-    await ffmpeg.run(...CreateCmd.joinVideos(timeline));
-
-    console.log(CreateCmd.joinVideos(timeline));
-    const output = ffmpeg.FS('readFile', 'output.mp4');
-    setPreviewSrc(URL.createObjectURL(new Blob([output.buffer], { type: 'video/mp4' })));
-
-    // clean up
-    try{
-      for(const f of timeline){
-        ffmpeg.FS('unlink', f.fileName);
-      }
-    }
-    catch(e){
-      console.error(e)
-    }
-  }
-
   function removeFromTimeline(file_name){
     const videos = timeline.filter(video => {
       if(video.fileName !== file_name) return true;
@@ -162,10 +136,11 @@ function App() {
           <div id="timeline" className="component">
             <Timeline
               videos={timeline}
-              joinVideos={joinVideos}
               removeVideo={removeFromTimeline}
               setModalUrl={setModalUrl}
               setModalShow={setModalShow}
+              ffmpeg={ffmpeg}
+              setPreviewSrc={setPreviewSrc}
             />
           </div>
         </DragDropContext>

@@ -1,11 +1,27 @@
 import { useState, useEffect } from 'react';
+import { joinVideos } from '../lib/util'
 import './Timeline.css'
 import { Droppable } from "react-beautiful-dnd";
 import Button from 'react-bootstrap/Button';
 import VideoThumbnail from './VideoThumbnail'
 
-function Timeline({videos, joinVideos, removeVideo, setModalUrl, setModalShow}){
+function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc}){
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [progress, setProgress] = useState({});
+  const [running, setRunning] = useState(false);
+
+  ffmpeg.setProgress(setProgress)
+  ffmpeg.runWithLock = async function(...cmd){
+    setRunning(true);
+    await this.run(...cmd);
+    setRunning(false);
+  }
+
+  const join = async () => {
+    const out_url = await joinVideos(ffmpeg, videos);
+    setPreviewSrc(out_url);
+  }
+
 
   // B-DnD fix in StrictMode
   const [ enabled, setEnabled ] = useState(false);
@@ -27,7 +43,8 @@ function Timeline({videos, joinVideos, removeVideo, setModalUrl, setModalShow}){
     <div>
       <div className="grid-center my-2">
         <div className='options'>
-          <Button className="btn-sm btn-info" onClick={joinVideos}>Join</Button>
+          <span className={running ? 'text-white' : ''}>{JSON.stringify(progress)}</span>
+          <Button className="btn-sm btn-info" onClick={join}>Join</Button>
 
           <Button
               className='bg-transparent video-option'
