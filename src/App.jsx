@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import { DragDropContext } from "react-beautiful-dnd";
 import { uuid } from './lib/util';
+import Button from 'react-bootstrap/Button';
 import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
@@ -127,6 +128,7 @@ function App() {
 
   return (
     <div className="App">
+
       <DragDropContext onDragEnd={onDragEnd}>
         <div id="library" className="component">
           <Library videos={library} addVideoToLibrary={addVideoToLibrary}/>
@@ -135,7 +137,7 @@ function App() {
           <video src={previewSrc || rabbit} controls></video>
         </div>
         <div id="timeline" className="component">
-          <button className="btn-sm btn-info" onClick={joinVideos}>Join</button>
+          <Button className="btn-sm btn-info" onClick={joinVideos}>Join</Button>
           <Timeline videos={timeline}/>
         </div>
       </DragDropContext>
