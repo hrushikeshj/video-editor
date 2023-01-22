@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import { DragDropContext } from "react-beautiful-dnd";
 import { uuid, releaseUrl } from './lib/util';
@@ -18,10 +18,17 @@ function App() {
   const [previewSrc, setPreviewSrc] = useState();
   const [library, setLibrary] = useState([]);
   const [timeline, setTimeline] = useState([]);
+  const prevPreviewSrc = useRef("");
 
   const ffmpeg = createFFmpeg({
     log: true,
   });
+
+  // release resources(object URL)
+  useEffect(() => {
+    releaseUrl(prevPreviewSrc.current, false);
+    prevPreviewSrc.current = previewSrc;
+  }, [previewSrc]);
 
   useEffect(() => {
     if(library.length != 0) return;
