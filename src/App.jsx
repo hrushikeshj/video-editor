@@ -86,7 +86,7 @@ function App() {
     setTimeline(videos);
   }
 
-  const replaceVideo = async (file_name, new_url) => {
+  const replaceVideo = async (file_name, new_urls) => {
     const i = timeline.findIndex(v => v.fileName === file_name);
     if(i === -1) return;
 
@@ -94,12 +94,19 @@ function App() {
 
     const newTimeline = [...timeline];
     // regenerate metadata
-    const { duration, thumbnail } = await generateVideoThumbnail(new_url);
-    const new_video = {...newTimeline[i], original: false, url: new_url, duration, thumbnail};
-    new_video.fileName = uuid() + '_' + new_video.fileName;
+    let new_videos = [];
 
-    newTimeline.splice(i, 1, new_video);
+    for(const [new_url_idx, new_url] of new_urls.entries()){
+      const { duration, thumbnail } = await generateVideoThumbnail(new_url);
+      let title = new_urls.length == 1 ? newTimeline[i].title : newTimeline[i].title + '_' + new_url_idx;
 
+      const new_video = {...newTimeline[i], original: false, url: new_url, duration, thumbnail, title};
+      new_video.fileName = uuid() + '_' + new_video.fileName;
+
+      new_videos.push(new_video);
+    }
+
+    newTimeline.splice(i, 1, ...new_videos);
     setTimeline(newTimeline);
   }
 

@@ -5,6 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 import Button from 'react-bootstrap/Button';
 import VideoThumbnail from './VideoThumbnail'
 import TrimForm from '../form/Trim'
+import SplitForm from '../form/Split'
 
 function humanizeProgress(p){
   //{"ratio":0.7052561543579509,"time":7.29}
@@ -33,19 +34,40 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
 
   const trim = async (video) => {
     gSetModalShow(true);
+    setSelectedVideo(null);
     gSetModalContent(
       <TrimForm 
       trimFnc={
         async (ss, t) => {
-          setSelectedVideo(null);
           gSetModalShow(false);
           const out_url = await trimVideo(ffmpeg, video.url, video.fileName, ss, t);
-          replaceVideo(video.fileName, out_url);
-          }
+          replaceVideo(video.fileName, [out_url]);
+        }
       }/>
     )
   }
 
+  const split = async (video) => {
+    setSelectedVideo(null);
+
+    gSetModalShow(true);
+    gSetModalContent(
+      <SplitForm 
+      trimFnc={
+        async (split_at) => {
+          if(split_at > video.duration){
+            alert("Invalid time");
+            return;
+          }
+
+          gSetModalShow(false);
+          const out_url = await trimVideo(ffmpeg, video.url, video.fileName, 0, split_at);
+          const out_url1 = await trimVideo(ffmpeg, video.url, video.fileName, split_at, video.duration);
+          replaceVideo(video.fileName, [out_url, out_url1]);
+        }
+      }/>
+    )
+  }
 
   // B-DnD fix in StrictMode
   const [enabled, setEnabled ] = useState(false);
@@ -76,6 +98,14 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
               onClick={() => trim(selectedVideo)}
             >
               <i className="bi bi-scissors text-white"></i> Trim
+          </Button>
+
+          <Button
+              className='bg-transparent video-option'
+              disabled={selectedVideo === null}
+              onClick={() => split(selectedVideo)}
+            >
+              <i className="bi bi-layout-split text-white"></i> Split
           </Button>
 
           <Button
