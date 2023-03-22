@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function VModal({ show, setShow, children }) {
+function VModal({ show, setShow, title, children }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -9,7 +9,7 @@ function VModal({ show, setShow, children }) {
     <>
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>Preview</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{ children }</Modal.Body>
         <Modal.Footer>

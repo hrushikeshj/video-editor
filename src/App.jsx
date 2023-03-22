@@ -192,7 +192,7 @@ function App() {
         </DragDropContext>
       </div>
 
-      <VideoPreviewModal show={modalShow} setShow={setModalShow}>
+      <VideoPreviewModal show={modalShow} setShow={setModalShow} title="Preview">
         <div
           style={{
             display: 'grid',
@@ -204,7 +204,7 @@ function App() {
         </div>
       </VideoPreviewModal>
 
-      <VModal show={gModalShow} setShow={gSetModalShow}>
+      <VModal show={gModalShow} setShow={gSetModalShow} title="Enter Time">
         {gModalContent}
       </VModal>
 
