@@ -193,7 +193,7 @@ function App() {
             alignItems: 'center'
           }}
         >
-          <video src={modalUrl} controls autoPlay={true}></video>
+          <video src={modalUrl} controls autoPlay={true} style={{width: "100%"}}></video>
         </div>
       </VideoPreviewModal>
 

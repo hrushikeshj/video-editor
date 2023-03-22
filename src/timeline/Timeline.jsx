@@ -6,6 +6,14 @@ import Button from 'react-bootstrap/Button';
 import VideoThumbnail from './VideoThumbnail'
 import TrimForm from '../form/Trim'
 
+function humanizeProgress(p){
+  //{"ratio":0.7052561543579509,"time":7.29}
+  let ratio = p.ratio ? (p.ratio * 100).toFixed(2) : 0;
+  let time = p.time ? p.time : 0;
+
+  return `${ratio}%, ${time} sec`
+}
+
 function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate, gSetModalShow, gSetModalContent}){
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [progress, setProgress] = useState({time: -1});
@@ -30,9 +38,9 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
       trimFnc={
         async (ss, t) => {
           setSelectedVideo(null);
+          gSetModalShow(false);
           const out_url = await trimVideo(ffmpeg, video.url, video.fileName, ss, t);
           replaceVideo(video.fileName, out_url);
-          gSetModalShow(false);
           }
       }/>
     )
@@ -59,7 +67,7 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
     <div>
       <div className="grid-center my-2">
         <div className='options'>
-          <span className={running ? 'text-white' : ''}>{JSON.stringify(progress)}</span>
+          <span className={running ? 'text-white' : ''}>{'.'}</span>
           <Button className="btn-sm btn-info" onClick={join}>Join</Button>
 
           <Button
@@ -120,6 +128,14 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
           </div>
         )}
       </Droppable>
+      <div className="loading style-2" style={{display: running ? "block" : "none"}}>
+        <div className='loading-wheel-center'>
+          <div className="loading-wheel"></div>
+          <div className="progress-video text-white text-center">
+            {humanizeProgress(progress)}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

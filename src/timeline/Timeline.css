@@ -40,3 +40,52 @@
 .options .video-option:hover{
   background-color: #565656 !important;
 }
+
+/* loading overlay */
+.loading {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /*rgba(0,0,0,.5)*/
+  background-color: rgba(15, 15, 15, 0.5);
+}
+
+.loading-wheel-center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+
+.loading-wheel {
+  width: 20px;
+  height: 20px;
+  margin-top: -60px;
+  margin-left: -40px;
+  border-width: 30px;
+  border-radius: 50%;
+  -webkit-animation: spin 1s linear infinite;
+}
+
+.progress-video{
+  margin-top: 10px;
+  margin-left: -40px;
+}
+
+.style-2 .loading-wheel {
+  border-style: double;
+  border-color: #ccc transparent;
+}
+@-webkit-keyframes spin {
+  0% {
+      -webkit-transform: rotate(0);
+  }
+  100% {
+      -webkit-transform: rotate(-360deg);
+  }
+}

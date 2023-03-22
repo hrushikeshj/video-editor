@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 function Trim({trimFnc}) {
   const [st, setSt] = useState(0);
-  const [tl, setTl] = useState(0);
+  const [tl, setTl] = useState(1);
   const [disabled, setDiabled] =  useState(false);
 
 
@@ -26,7 +26,7 @@ function Trim({trimFnc}) {
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Total Length</Form.Label>
-        <Form.Control type="number" placeholder="0" step="0.1" onChange={(e) => setTl(e.target.value)} />
+        <Form.Control type="number" placeholder="1" step="0.1" onChange={(e) => setTl(e.target.value)} />
         <Form.Text className="text-muted">
           Total Length in Seconds.
         </Form.Text>
