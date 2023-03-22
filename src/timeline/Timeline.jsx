@@ -4,8 +4,9 @@ import './Timeline.css'
 import { Droppable } from "react-beautiful-dnd";
 import Button from 'react-bootstrap/Button';
 import VideoThumbnail from './VideoThumbnail'
+import TrimForm from '../form/Trim'
 
-function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate}){
+function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate, gSetModalShow, gSetModalContent}){
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [progress, setProgress] = useState({time: -1});
   const [running, setRunning] = useState(false);
@@ -23,11 +24,18 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
   }
 
   const trim = async (video) => {
-    setSelectedVideo(null);
-    let ss = prompt("start time(in sec)");
-    let t = prompt("total duration(in sec)");
-    const out_url = await trimVideo(ffmpeg, video.url, video.fileName, ss, t);
-    replaceVideo(video.fileName, out_url);
+    gSetModalShow(true);
+    gSetModalContent(
+      <TrimForm 
+      trimFnc={
+        async (ss, t) => {
+          setSelectedVideo(null);
+          const out_url = await trimVideo(ffmpeg, video.url, video.fileName, ss, t);
+          replaceVideo(video.fileName, out_url);
+          gSetModalShow(false);
+          }
+      }/>
+    )
   }
 
 
@@ -59,7 +67,7 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
               disabled={selectedVideo === null}
               onClick={() => trim(selectedVideo)}
             >
-              <i className="bi bi-scissors text-white"></i> Trim(!to be improved)
+              <i className="bi bi-scissors text-white"></i> Trim
           </Button>
 
           <Button

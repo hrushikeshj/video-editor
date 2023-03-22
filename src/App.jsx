@@ -6,6 +6,7 @@ import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
 import VideoPreviewModal from './util/Modal'
+import VModal from './util/Modal'
 import useVidoeModal from './hooks/useVideoModal'
 import generateVideoThumbnail from './lib/thumbnail'
 
@@ -15,6 +16,8 @@ import CreateCmd from './lib/create_cmd'
 
 function App() {
   const { modalShow, modalUrl, setModalShow, setModalUrl } = useVidoeModal();
+  const [gModalShow, gSetModalShow] = useState(false);
+  const [gModalContent, gSetModalContent] = useState(<h1>Hi</h1>);
   const [previewSrc, setPreviewSrc] = useState();
   const [library, setLibrary] = useState([]);
   const [timeline, setTimeline] = useState([]);
@@ -176,7 +179,7 @@ function App() {
             <Timeline
               videos={timeline}
               removeVideo={removeFromTimeline}
-              {...{setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate}}
+              {...{setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate, gSetModalShow, gSetModalContent}}
             />
           </div>
         </DragDropContext>
@@ -193,6 +196,12 @@ function App() {
           <video src={modalUrl} controls autoPlay={true}></video>
         </div>
       </VideoPreviewModal>
+
+      <VModal show={gModalShow} setShow={gSetModalShow}>
+        {gModalContent}
+      </VModal>
+
+      
     </>
   )
 }
