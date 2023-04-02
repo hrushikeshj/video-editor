@@ -106,6 +106,10 @@ class CreateCmd{
         return ["-f", "lavfi", "-i", "anullsrc=channel_layout=mono:sample_rate=44100"];
     }
 
+    static exportVideo(format: string){
+        return ["-i", "src_video.mp4", `output.${format}`]
+    }
+
 }
 
 let f1 = new File('f1');

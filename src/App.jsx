@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import { DragDropContext } from "react-beautiful-dnd";
-import { uuid, releaseUrl } from './lib/util';
+import { uuid, releaseUrl, exportVideo } from './lib/util';
 import './App.css';
 import Library from './library/Library';
 import Timeline from './timeline/Timeline';
@@ -52,6 +52,23 @@ function App() {
     })
     //addVideoToLibrary(rabbit, 'dd');
   }, []);// for testing
+
+  async function exportAndDownload(e){
+    if(e.target.selectedOptions && previewSrc){
+      let format = e.target.selectedOptions[0].text;
+      if(format != "Export"){
+        console.log(previewSrc)
+        let src = await exportVideo(ffmpeg, previewSrc, format);
+        var a = document.createElement("a");
+        a.style = "display: none";
+        a.href = src;
+        a.download = `out.${format}`;
+        a.click();
+        releaseUrl(src, false)
+      }
+      
+    }
+  }
 
   /*
   TODO:
@@ -186,7 +203,7 @@ function App() {
             <Timeline
               videos={timeline}
               removeVideo={removeFromTimeline}
-              {...{setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate, gSetModalShow, gSetModalContent}}
+              {...{setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate, gSetModalShow, gSetModalContent, exportAndDownload}}
             />
           </div>
         </DragDropContext>

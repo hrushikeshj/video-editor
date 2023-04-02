@@ -67,3 +67,25 @@ export async function trimVideo(ffmpeg, url, file_name, ss, t){
 
   return out_url;
 }
+
+export async function exportVideo(ffmpeg, url, format){
+  if(!ffmpeg.isLoaded()){
+    await ffmpeg.load();
+  }
+
+  ffmpeg.FS('writeFile', 'src_video.mp4', await fetchFile(url));
+
+  await ffmpeg.runWithLock(...CreateCmd.exportVideo(format));
+  const output = ffmpeg.FS('readFile', `output.${format}`);
+  const out_url = URL.createObjectURL(new Blob([output.buffer], { type: 'video/mp4' }));
+
+  try{
+    ffmpeg.FS('unlink', `output.${format}`);
+    ffmpeg.FS('unlink', 'src_video.mp4');
+  }
+  catch(e){
+    console.error(e)
+  }
+
+  return out_url;
+}
