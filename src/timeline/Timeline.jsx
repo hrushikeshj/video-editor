@@ -3,6 +3,7 @@ import { joinVideos, trimVideo } from '../lib/util'
 import './Timeline.css'
 import { Droppable } from "react-beautiful-dnd";
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import VideoThumbnail from './VideoThumbnail'
 import TrimForm from '../form/Trim'
 import SplitForm from '../form/Split'
@@ -15,7 +16,7 @@ function humanizeProgress(p){
   return `${ratio}%, ${time} sec`
 }
 
-function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate, gSetModalShow, gSetModalContent}){
+function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPreviewSrc, replaceVideo, duplicate, gSetModalShow, gSetModalContent, exportAndDownload}){
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [progress, setProgress] = useState({time: -1});
   const [running, setRunning] = useState(false);
@@ -138,6 +139,16 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
             >
               <i className="bi bi-trash3 text-white"></i>
             </Button>
+          </div>
+
+          <div className='divider'>
+            <Form.Select aria-label="Default select example" size="sm" onChange={exportAndDownload}>
+              <option>Export</option>
+              <option value="1">mp4</option>
+              <option value="2">avi</option>
+              <option value="3">mkv</option>
+              <option value="4">mp3</option>
+            </Form.Select>
           </div>
           
         </div>
