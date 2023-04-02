@@ -142,8 +142,9 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
           </div>
 
           <div className='divider'>
-            <Form.Select aria-label="Default select example" size="sm" onChange={exportAndDownload}>
-              <option>Export</option>
+            <Form.Select aria-label="Default select example" style={{marginTop: "3px"}} size="sm" onChange={exportAndDownload}>
+              <option value="Export">Export</option>
+              <option value="5">gif</option>
               <option value="1">mp4</option>
               <option value="2">avi</option>
               <option value="3">mkv</option>
