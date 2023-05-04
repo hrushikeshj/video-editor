@@ -52,7 +52,7 @@ function Trim({trimFnc, duration, url}) {
         minValue="0"
         maxValue={duration}
         max={duration}
-        displayCaption={(i) => i + " -> " + readableDurationMill(i)} 
+        displayCaption={readableDurationMill} 
         onChange={updateRange}
         onInput={updateVideo}
       />
