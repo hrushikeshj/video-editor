@@ -7,6 +7,11 @@ This is a simple web video editor built using React and [ffmpeg.wasm](https://gi
 - Split videos at a specific time
 - Export the edited video in various formats(mp4, mkv, avi, gif)
 
+## Demo
+
+https://user-images.githubusercontent.com/66632353/236174171-0a282397-f5c3-4068-9ea1-e9cb6147b0fd.mp4
+
+--------------------------------------------------------------
 
 <img width="960" alt="image" src="https://user-images.githubusercontent.com/66632353/236167875-ab8ae2f8-5772-4a73-94b0-d07e1a72e805.png">
 
