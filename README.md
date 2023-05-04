@@ -8,6 +8,7 @@ This is a simple web video editor built using React and [ffmpeg.wasm](https://gi
 - Export the edited video in various formats(mp4, mkv, avi, gif)
 
 ## Demo
+Try out the app at [https://sunny-paprenjak-c1baec.netlify.app/](https://sunny-paprenjak-c1baec.netlify.app/).
 
 https://user-images.githubusercontent.com/66632353/236174171-0a282397-f5c3-4068-9ea1-e9cb6147b0fd.mp4
 
