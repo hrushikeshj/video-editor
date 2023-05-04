@@ -37,14 +37,17 @@ function Timeline({videos, removeVideo, setModalUrl, setModalShow, ffmpeg, setPr
     gSetModalShow(true);
     setSelectedVideo(null);
     gSetModalContent(
-      <TrimForm 
+      <TrimForm
       trimFnc={
         async (ss, t) => {
           gSetModalShow(false);
           const out_url = await trimVideo(ffmpeg, video.url, video.fileName, ss, t);
           replaceVideo(video.fileName, [out_url]);
         }
-      }/>
+      }
+      duration={video.duration}
+      url={video.url}
+      />
     )
   }
 
