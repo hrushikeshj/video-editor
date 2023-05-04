@@ -221,7 +221,7 @@ function App() {
         </div>
       </VideoPreviewModal>
 
-      <VModal show={gModalShow} setShow={gSetModalShow} title="Enter Time">
+      <VModal show={gModalShow} setShow={gSetModalShow} title="Select Time">
         {gModalContent}
       </VModal>
 

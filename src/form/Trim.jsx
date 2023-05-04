@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import MultiRange from '../range/multirangeslider';
+import { readableDurationMill } from '../lib/util'
 
-function Trim({trimFnc}) {
+function Trim({trimFnc, duration, url}) {
   const [st, setSt] = useState(0);
-  const [tl, setTl] = useState(1);
+  const [tl, setTl] = useState(duration);
   const [disabled, setDiabled] =  useState(false);
+  const previewVideo = useRef();
+  const previousMin = useRef({minValue: 0, maxValue: duration});
 
 
   function handelSubmit(e){
@@ -14,27 +18,56 @@ function Trim({trimFnc}) {
     trimFnc(st, tl);
   }
 
+  function updateRange(e){
+    setSt(e.minValue);
+    setTl(e.maxValue - e.minValue);
+  }
+  
+  function updateVideo(e){
+    if(previousMin.current.minValue != e.minValue){
+      previewVideo.current.currentTime = e.minValue;
+    }
+
+    if(previousMin.current.maxValue != e.maxValue){
+      previewVideo.current.currentTime = e.maxValue;
+    }
+
+    previousMin.current = e;
+  }
+
   return (
     <Form onSubmit={handelSubmit}>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Start Time</Form.Label>
-        <Form.Control type="number" placeholder="0" step="0.1" onChange={(e) => setSt(e.target.value)} />
-        <Form.Text className="text-muted">
-          Start Time in Seconds.
-        </Form.Text>
-      </Form.Group>
+      <div
+        style={{
+          display: 'grid',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <video ref={previewVideo} src={url} controls autoPlay={false} style={{width: "100%"}}></video>
+      </div>
+      <MultiRange 
+        ruler={false}
+        step="0.05"
+        minValue="0"
+        maxValue={duration}
+        max={duration}
+        displayCaption={(i) => i + " -> " + readableDurationMill(i)} 
+        onChange={updateRange}
+        onInput={updateVideo}
+      />
 
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Total Length</Form.Label>
-        <Form.Control type="number" placeholder="1" step="0.1" onChange={(e) => setTl(e.target.value)} />
-        <Form.Text className="text-muted">
-          Total Length in Seconds.
-        </Form.Text>
-      </Form.Group>
-
-      <Button variant="primary" type="submit" disabled={disabled}>
-        {disabled ? "Trimming.." : "Trim"}
-      </Button>
+      <div
+        style={{
+          display: 'grid',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <Button variant="primary" type="submit" disabled={disabled}>
+          {disabled ? "Trimming.." : "Trim"}
+        </Button>
+      </div>
     </Form>
   );
 }

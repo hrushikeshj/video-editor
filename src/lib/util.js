@@ -10,6 +10,12 @@ export function readableDuration(sec){
   return `${Math.floor(r_sec/60)}:${r_sec%60}`; 
 }
 
+export function readableDurationMill(sec){
+  const m_sec = (+sec).toFixed(3) * 1000;
+  const r_sec = Math.floor(m_sec/1000);
+  return `${Math.floor(r_sec/60)}:${r_sec%60}:${m_sec%1000}`; 
+}
+
 export function  releaseUrl(url, org) {
   if(org) return;
 
